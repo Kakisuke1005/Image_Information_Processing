@@ -3,7 +3,7 @@
 
 #define MAX_DATA 100
 
-void File_result(FILE *fp);
+void File_open_result(FILE *fp);
 
 int main()
 {
@@ -13,7 +13,7 @@ int main()
   unsigned char array[MAX_DATA];
 
   fp=fopen("test.bmp","rb");
-  File_result(fp);
+  File_open_result(fp);
   printf("読み込み用ファイルをオープンしました．\n");
 
   c=fgetc(fp);
@@ -34,7 +34,7 @@ int main()
   printf("\n");
 
   fp=fopen("testcp.bmp","wb");
-  File_result(fp);
+  File_open_result(fp);
   printf("書き出し用ファイルをオープンしました．\n");
 
   for(int i=0;i<byte;i++){
@@ -49,7 +49,7 @@ int main()
   return 0;
 }
 
-void File_result(FILE *fp)
+void File_open_result(FILE *fp)
 {
   if(fp==NULL){
     printf("ファイルをオープンできません．\n");
