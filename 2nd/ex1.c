@@ -14,13 +14,13 @@ int main()
 
   fp1=fopen(file_name[0],"rb");
   if(fp1==NULL){
-    printf("Cannot open the %s!\n",file_name[0]);
+    printf("Cannot open the %s!!\n",file_name[0]);
     exit(1);
   }
 
   fp2=fopen(file_name[1],"rb");
   if(fp2==NULL){
-    printf("Cannot open the %s!\n",file_name[1]);
+    printf("Cannot open the %s!!\n",file_name[1]);
     exit(1);
   }
 
