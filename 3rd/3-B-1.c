@@ -74,8 +74,17 @@ void get_data(void)
     byte+=header[i]*buff;
     i++;
   }
-
   printf("\n%dバイト\n",byte);
+
+  printf("\n＜予約領域＞\n");
+  while(i<10){
+    if(header[i]>16){
+      printf("header[%d]=%x ",i,header[i]);
+    }else{
+      printf("header[%d]=0%x ",i,header[i]);
+    }
+    i++;
+  }
 
   fclose(fp);
 }
