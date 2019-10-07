@@ -23,6 +23,7 @@ void get_data(void)
   char file_name[20];
   int c;
   int i=0;
+  int filesize,offset,width,height,bits;
 
   printf("入力ファイル名を入力して下さい:");
   scanf("%s",file_name);
@@ -62,7 +63,8 @@ void get_data(void)
     }
     i++;
   }
-  printf("\n%dバイト\n",get_decimal_number(2,4));
+  filesize=get_decimal_number(2,4);
+  printf("\n%dバイト\n",filesize);
 
   printf("\n＜予約領域＞\n");
   while(i<10){
@@ -83,7 +85,8 @@ void get_data(void)
     }
     i++;
   }
-  printf("\n%dバイト\n",get_decimal_number(10,4));
+  offset=get_decimal_number(10,4);
+  printf("\n%dバイト\n",offset);
 
   printf("\n＜情報ヘッダサイズ＞\n");
   while(i<18){
@@ -104,9 +107,11 @@ void get_data(void)
     }
     i++;
   }
-  printf("\n%d画素\n",get_decimal_number(18,4));
+  width=get_decimal_number(18,4);
+  printf("\n%d画素\n",width);
 
   fclose(fp);
+  printf("ファイルをクローズしました\n");
 }
 
 int get_decimal_number(int start,int num)
