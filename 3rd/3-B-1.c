@@ -4,6 +4,7 @@
 #define SIZE 54
 
 void get_data(void);
+int get_decimal_number(int start,int num);
 
 unsigned char header[SIZE];  // ヘッダー部のデータ
 
@@ -22,8 +23,6 @@ void get_data(void)
   char file_name[20];
   int c;
   int i=0;
-  int byte=0;
-  int buff;
 
   printf("入力ファイル名を入力して下さい:");
   scanf("%s",file_name);
@@ -47,34 +46,23 @@ void get_data(void)
   printf("\n＜ファイルタイプ＞\n");
   while(i<2){
     if(header[i]>16){
-      printf("header[%d]=%2x ",i,header[i]);
+      printf("header[%d]=%x ",i,header[i]);
     }else{
       printf("header[%d]=0%x ",i,header[i]);
     }
     i++;
   }
-  printf("\n");
 
-  printf("\n＜ファイルサイズ＞\n");
+  printf("\n\n＜ファイルサイズ＞\n");
   while(i<6){
     if(header[i]>16){
-      printf("header[%d]=%2x ",i,header[i]);
+      printf("header[%d]=%x ",i,header[i]);
     }else{
       printf("header[%d]=0%x ",i,header[i]);
     }
-    if(i==2){
-      buff=1;
-    }else if(i==3){
-      buff=256;
-    }else if(i==4){
-      buff=65536;
-    }else if(i==5){
-      buff=16777216;
-    }
-    byte+=header[i]*buff;
     i++;
   }
-  printf("\n%dバイト\n",byte);
+  printf("\n%dバイト\n",get_decimal_number(2,4));
 
   printf("\n＜予約領域＞\n");
   while(i<10){
@@ -86,5 +74,60 @@ void get_data(void)
     i++;
   }
 
+  printf("\n\n＜オフセット＞\n");
+  while(i<14){
+    if(header[i]>16){
+      printf("header[%d]=%x ",i,header[i]);
+    }else{
+      printf("header[%d]=0%x ",i,header[i]);
+    }
+    i++;
+  }
+  printf("\n%dバイト\n",get_decimal_number(10,4));
+
+  printf("\n＜情報ヘッダサイズ＞\n");
+  while(i<18){
+    if(header[i]>16){
+      printf("header[%d]=%x ",i,header[i]);
+    }else{
+      printf("header[%d]=0%x ",i,header[i]);
+    }
+    i++;
+  }
+
+  printf("\n\n＜画像の幅＞\n");
+  while(i<22){
+    if(header[i]>16){
+      printf("header[%d]=%x ",i,header[i]);
+    }else{
+      printf("header[%d]=0%x ",i,header[i]);
+    }
+    i++;
+  }
+  printf("\n%d画素\n",get_decimal_number(18,4));
+
   fclose(fp);
+}
+
+int get_decimal_number(int start,int num)
+{
+  int ans=0;
+  int i=0;
+  int tmp;
+
+  while(i<num){
+     if(i==0){
+      tmp=1;
+    }else if(i==1){
+      tmp=256;
+    }else if(i==2){
+      tmp=65536;
+    }else if(i==3){
+      tmp=16777216;
+    }
+    ans+=(header[start]*tmp);
+    start++;
+    i++;
+  }
+  return ans;
 }
