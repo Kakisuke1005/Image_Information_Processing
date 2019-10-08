@@ -4,15 +4,14 @@
 #define SIZE 54
 
 void get_data(void);
-int get_decimal_number(int start,int num);
+void show_data(int num);  //ヘッダーのデータを表示
+int get_decimal_number(int start,int num);  //ヘッダーのデータを10進数として計算
 
 unsigned char header[SIZE];  // ヘッダー部のデータ
 
 int main(void)
 {
-
   get_data();
-
   return 0;
 }
 
@@ -46,21 +45,13 @@ void get_data(void)
 
   printf("\n＜ファイルタイプ＞\n");
   while(i<2){
-    if(header[i]>16){
-      printf("header[%d]=%x ",i,header[i]);
-    }else{
-      printf("header[%d]=0%x ",i,header[i]);
-    }
+    show_data(i);
     i++;
   }
 
   printf("\n\n＜ファイルサイズ＞\n");
   while(i<6){
-    if(header[i]>16){
-      printf("header[%d]=%x ",i,header[i]);
-    }else{
-      printf("header[%d]=0%x ",i,header[i]);
-    }
+    show_data(i);
     i++;
   }
   filesize=get_decimal_number(2,4);
@@ -68,21 +59,13 @@ void get_data(void)
 
   printf("\n＜予約領域＞\n");
   while(i<10){
-    if(header[i]>16){
-      printf("header[%d]=%x ",i,header[i]);
-    }else{
-      printf("header[%d]=0%x ",i,header[i]);
-    }
+    show_data(i);
     i++;
   }
 
   printf("\n\n＜オフセット＞\n");
   while(i<14){
-    if(header[i]>16){
-      printf("header[%d]=%x ",i,header[i]);
-    }else{
-      printf("header[%d]=0%x ",i,header[i]);
-    }
+    show_data(i);
     i++;
   }
   offset=get_decimal_number(10,4);
@@ -90,28 +73,90 @@ void get_data(void)
 
   printf("\n＜情報ヘッダサイズ＞\n");
   while(i<18){
-    if(header[i]>16){
-      printf("header[%d]=%x ",i,header[i]);
-    }else{
-      printf("header[%d]=0%x ",i,header[i]);
-    }
+    show_data(i);
     i++;
   }
 
   printf("\n\n＜画像の幅＞\n");
   while(i<22){
-    if(header[i]>16){
-      printf("header[%d]=%x ",i,header[i]);
-    }else{
-      printf("header[%d]=0%x ",i,header[i]);
-    }
+    show_data(i);
     i++;
   }
   width=get_decimal_number(18,4);
   printf("\n%d画素\n",width);
 
+  printf("\n＜画像の高さ＞\n");
+  while(i<26){
+    show_data(i);
+    i++;
+  }
+  height=get_decimal_number(22,4);
+  printf("\n%dライン\n",height);
+
+  printf("\n＜色プレーン数＞\n");
+  while(i<28){
+    show_data(i);
+    i++;
+  }
+
+  printf("\n\n＜1画素当たりのビット数＞\n");
+  while(i<30){
+    show_data(i);
+    i++;
+  }
+  bits=get_decimal_number(28,2);
+  printf("\n%dビット\n",bits);
+
+  printf("\n＜圧縮方式＞\n");
+  while(i<34){
+    show_data(i);
+    i++;
+  }
+
+  printf("\n\n＜画像データサイズ＞\n");
+  while(i<38){
+    show_data(i);
+    i++;
+  }
+
+  printf("\n\n＜水平解像度＞\n");
+  while(i<42){
+    show_data(i);
+    i++;
+  }
+
+  printf("\n\n＜垂直解像度＞\n");
+  while(i<46){
+    show_data(i);
+    i++;
+  }
+
+  printf("\n\n＜色数＞\n");
+  while(i<50){
+    show_data(i);
+    i++;
+  }
+
+  printf("\n\n＜重要な色数＞\n");
+  while(i<54){
+    show_data(i);
+    i++;
+  }
+
+  printf("\n\n＜挿入ビット数＞\n");
+  printf("%dバイト\n",filesize-offset-width*height*(bits/8));
+
   fclose(fp);
   printf("ファイルをクローズしました\n");
+}
+
+void show_data(int num)
+{
+  if(header[num]>=16){
+      printf("header[%d]=%x ",num,header[num]);
+    }else{
+      printf("header[%d]=0%x ",num,header[num]);
+    }
 }
 
 int get_decimal_number(int start,int num)
