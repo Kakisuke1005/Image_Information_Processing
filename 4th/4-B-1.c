@@ -2,22 +2,25 @@
 #include<stdlib.h>
 
 #define HEADER_SIZE 54  // ヘッダー部のサイズ
-#define IMGIN_SIZE 512  // データ部のサイズ
+#define IMAGE_SIZE 512  // データ部のサイズ
 
 void get_data(void);
 void show_data(int num);  //ヘッダーのデータを表示
 int get_decimal_number(int start,int num);  //ヘッダーのデータを10進数として計算
 void processing(void);
 void show_imgin_data(int num,int x,int y);  // 画像データの表示
+void put_data(void);
 
 unsigned char header[HEADER_SIZE];  // ヘッダー部のデータ
-unsigned char imgin[3][IMGIN_SIZE][IMGIN_SIZE];  // データ部の画像データ
+unsigned char imgin[3][IMAGE_SIZE][IMAGE_SIZE];  // データ部の画像データ
+unsigned char imgout[3][IMAGE_SIZE][IMAGE_SIZE];  // 画像出力データ
 int width,height,bytes;  // 画像の幅、画像の高さ、挿入バイト数
 
 int main(void)
 {
   get_data();
   processing();
+  put_data();
   return 0;
 }
 
@@ -198,29 +201,43 @@ void processing(void)
 {
   printf("\n入力データを表示します\n\n");
 
-  printf("＜R信号＞\n");
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
-      show_imgin_data(0,j,i);
+  if(width>25){
+    printf("画像サイズが大きいため出力しません\n");
+  }else{
+    printf("＜R信号＞\n");
+    for(int i=0;i<height;i++){
+      for(int j=0;j<width;j++){
+	show_imgin_data(0,j,i);
+      }
+      printf("\n");
     }
-    printf("\n");
+    
+    printf("\n＜G信号＞\n");
+    for(int i=0;i<height;i++){
+      for(int j=0;j<width;j++){
+	show_imgin_data(1,j,i);
+      }
+      printf("\n");
+    }
+    
+    printf("\n＜B信号＞\n");
+    for(int i=0;i<height;i++){
+      for(int j=0;j<width;j++){
+	show_imgin_data(2,j,i);
+      }
+      printf("\n");
+    }
   }
 
-  printf("\n＜G信号＞\n");
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
-      show_imgin_data(1,j,i);
+  for(int i=0;i<3;i++){  // imginをimgoutにコピー
+    for(int j=0;j<height;j++){
+      for(int k=0;k<width;i++){
+	imgout[i][k][j]=imgin[i][k][j];
+      }
     }
-    printf("\n");
   }
 
-  printf("\n＜B信号＞\n");
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
-      show_imgin_data(2,j,i);
-    }
-    printf("\n");
-  }
+  printf("出力画像データを作成しました");
 }
 
 void show_imgin_data(int num,int x,int y)
@@ -230,4 +247,23 @@ void show_imgin_data(int num,int x,int y)
   }else{
     printf("0%x ",imgin[num][x][y]);
   }
+}
+
+void put_data()
+{
+
+  FILE fp;
+  char file_name[20];
+
+  printf("出力ファイル名を入力して下さい");
+  scanf("%s",file_name);
+
+  fp=fopen(file_name,"wb");
+  if(fp==NULL){
+    printf("ファイルを開けませんでした\n");
+    exit(1);
+  }
+  printf("ファイルをオープンしました\n");
+
+
 }
