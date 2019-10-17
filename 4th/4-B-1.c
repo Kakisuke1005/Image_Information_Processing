@@ -255,7 +255,7 @@ void put_data()
   FILE *fp;
   char file_name[20];
 
-  printf("出力ファイル名を入力して下さい");
+  printf("出力ファイル名を入力して下さい:");
   scanf("%s",file_name);
 
   fp=fopen(file_name,"wb");
