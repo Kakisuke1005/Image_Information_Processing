@@ -207,7 +207,7 @@ void processing(void)
     printf("＜R信号＞\n");
     for(int i=0;i<height;i++){
       for(int j=0;j<width;j++){
-	show_imgin_data(0,j,i);
+	      show_imgin_data(0,j,i);
       }
       printf("\n");
     }
@@ -215,7 +215,7 @@ void processing(void)
     printf("\n＜G信号＞\n");
     for(int i=0;i<height;i++){
       for(int j=0;j<width;j++){
-	show_imgin_data(1,j,i);
+	      show_imgin_data(1,j,i);
       }
       printf("\n");
     }
@@ -223,7 +223,7 @@ void processing(void)
     printf("\n＜B信号＞\n");
     for(int i=0;i<height;i++){
       for(int j=0;j<width;j++){
-	show_imgin_data(2,j,i);
+        show_imgin_data(2,j,i);
       }
       printf("\n");
     }
@@ -231,8 +231,8 @@ void processing(void)
 
   for(int i=0;i<3;i++){  // imginをimgoutにコピー
     for(int j=0;j<height;j++){
-      for(int k=0;k<width;i++){
-	imgout[i][k][j]=imgin[i][k][j];
+      for(int k=0;k<width;k++){
+	      imgout[i][k][j]=imgin[i][k][j];
       }
     }
   }
@@ -252,7 +252,7 @@ void show_imgin_data(int num,int x,int y)
 void put_data()
 {
 
-  FILE fp;
+  FILE *fp;
   char file_name[20];
 
   printf("出力ファイル名を入力して下さい");
@@ -265,5 +265,18 @@ void put_data()
   }
   printf("ファイルをオープンしました\n");
 
+  for(int i=0;i<HEADER_SIZE;i++){  // ヘッダーのコピー
+    fputc(header[i],fp);
+  }
 
+  for(int i=height;i>0;i--){  // 画像データ読み込み
+    for(int j=0;j<width;j++){
+      fputc(imgout[2][j][i-1],fp);
+      fputc(imgout[1][j][i-1],fp);
+      fputc(imgout[0][j][i-1],fp);
+    }
+  }
+
+    fclose(fp);
+    printf("ファイルをクローズしました\n");
 }
