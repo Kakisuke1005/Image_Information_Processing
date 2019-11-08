@@ -45,12 +45,29 @@ int main()
   printf("Cb: %4.4f\n",ycbcr[1]);
   printf("Cr: %4.4f\n",ycbcr[2]);
 
+  // yCbCr信号を整数値に変換
+  ycbcr[0]=round_off(ycbcr[0]);
+  ycbcr[1]=round_off_cbcr(ycbcr[1]);
+  ycbcr[2]=round_off_cbcr(ycbcr[2]);
+
   // YCbCr信号を整数値で表示
   printf("\n＜変換されたYCbCr信号(整数値)＞\n");
-  printf("Y:  %d\n",round_off(ycbcr[0]));
-  printf("Cb: %d\n",ycbcr[1]);
-  printf("Cr: %d\n",ycbcr[2]);
+  printf("Y:  %d\n",(int)ycbcr[0]);
+  printf("Cb: %d\n",(int)ycbcr[1]);
+  printf("Cr: %d\n",(int)ycbcr[2]);
 
+  // YCbCr信号をRGB信号に変換
+  ycbcr[1]-=128;
+  ycbcr[2]-=128;
+  for(int i=0;i<3;i++){
+    rgb_out[i]=ycbcr_to_rgb[i][0]*ycbcr[0]+ycbcr_to_rgb[i][1]*ycbcr[1]+ycbcr_to_rgb[i][2]*ycbcr[2];
+  }
+
+  // 再度返還されたRGB信号の表示
+  printf("\n＜再度変換されたRGB信号(実数値)＞\n");
+  printf("R:  %4.4f\n",rgb_out[0]);
+  printf("G:  %4.4f\n",rgb_out[1]);
+  printf("B:  %4.4f\n",rgb_out[2]);
 
   return 0;
 }
@@ -58,14 +75,25 @@ int main()
 int round_off(double num)
 {
   double offset;
+
   if(num>=0.0){
     offset=0.5;
   }else{
     offset=-0.5;
   }
-
+  
   return (int)(num+offset);
 }
 
 int round_off_cbcr(double num)
-{}
+{
+  num=round_off(num)+128;
+
+  if(num>255){
+    num=255;
+  }else if(num<0){
+    num=0;
+  }
+
+  return (int)num;
+}
