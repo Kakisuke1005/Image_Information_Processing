@@ -1,5 +1,8 @@
 #include<stdio.h>
 
+int round_off(double num);  // 四捨五入をする
+int round_off_cbcr(double num);  // Cb,Cr信号に対する整数化
+
 int main()
 {
   int rgb_in[3];
@@ -42,5 +45,27 @@ int main()
   printf("Cb: %4.4f\n",ycbcr[1]);
   printf("Cr: %4.4f\n",ycbcr[2]);
 
+  // YCbCr信号を整数値で表示
+  printf("\n＜変換されたYCbCr信号(整数値)＞\n");
+  printf("Y:  %d\n",round_off(ycbcr[0]));
+  printf("Cb: %d\n",ycbcr[1]);
+  printf("Cr: %d\n",ycbcr[2]);
+
+
   return 0;
 }
+
+int round_off(double num)
+{
+  double offset;
+  if(num>=0.0){
+    offset=0.5;
+  }else{
+    offset=-0.5;
+  }
+
+  return (int)(num+offset);
+}
+
+int round_off_cbcr(double num)
+{}
