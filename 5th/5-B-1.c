@@ -69,6 +69,12 @@ int main()
   printf("G:  %4.4f\n",rgb_out[1]);
   printf("B:  %4.4f\n",rgb_out[2]);
 
+  // RGB信号を整数で表示
+  printf("\n＜再度変換されたRGB信号(整数値)＞\n");
+  printf("R:  %d\n",round_off(rgb_out[0]));
+  printf("G:  %d\n",round_off(rgb_out[1]));
+  printf("B:  %d\n",round_off(rgb_out[2]));
+
   return 0;
 }
 
@@ -81,19 +87,36 @@ int round_off(double num)
   }else{
     offset=-0.5;
   }
-  
-  return (int)(num+offset);
-}
 
-int round_off_cbcr(double num)
-{
-  num=round_off(num)+128;
-
+  num+=offset;
   if(num>255){
     num=255;
   }else if(num<0){
     num=0;
   }
-
+  
   return (int)num;
+}
+
+int round_off_cbcr(double num)
+{
+  double offset;
+  int ans;
+
+  if(num>=0.0){
+    offset=0.5;
+  }else{
+    offset=-0.5;
+  }
+
+  ans=(int)(num+offset);
+  ans+=128;
+
+  if(ans>255){
+    ans=255;
+  }else if(ans<0){
+    ans=0;
+  }
+
+  return ans;
 }
