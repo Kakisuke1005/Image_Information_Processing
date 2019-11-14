@@ -4,10 +4,10 @@
 #define HEADER_SIZE 54  // ヘッダー部のサイズ
 #define IMAGE_SIZE 512  // データ部のサイズ
 
-void get_data(void);
+void get_data(void);  // 
 int get_decimal_number(int start,int num);  //ヘッダーのデータを10進数として計算
-void processing(void);
-void put_data(void);
+void processing(void);  // 画像データをコピー
+void put_data(void);  // 画像データを出力
 void rgb_to_ybr(void);
 void ybr_to_rgb(void);
 
