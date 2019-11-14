@@ -10,6 +10,9 @@ void processing(void);  // 画像データをコピー
 void put_data(void);  // 画像データを出力
 void rgb_to_ybr(void);
 void ybr_to_rgb(void);
+void show_imgin_data(int num,int x,int y);  // 画像データの表示
+int round_off(double num);  // 四捨五入をする
+int round_off_cbcr(double num);  // Cb,Cr信号に対する整数化
 
 unsigned char header[HEADER_SIZE];  // ヘッダー部のデータ
 unsigned char imgin[3][IMAGE_SIZE][IMAGE_SIZE];  // データ部の画像データ
@@ -112,7 +115,6 @@ int get_decimal_number(int start,int num)
 
 void processing(void)
 {
-
   for(int i=0;i<3;i++){  // imginをimgoutにコピー
     for(int j=0;j<height;j++){
       for(int k=0;k<width;k++){
@@ -130,7 +132,7 @@ void put_data()
   FILE *fp;
   char file_name[20];
 
-  printf("出力ファイル名を入力して下さい:");
+  printf("\n出力ファイル名を入力して下さい:");
   scanf("%s",file_name);
 
   fp=fopen(file_name,"wb");
@@ -152,12 +154,106 @@ void put_data()
     }
   }
 
-    fclose(fp);
-    printf("ファイルをクローズしました\n");
+  fclose(fp);
+  printf("ファイルをクローズしました\n");
 }
 
 void rgb_to_ybr(void)
-{}
+{
+  double ycbcr[3][IMAGE_SIZE][IMAGE_SIZE];
+  double transformation_matrix[3][3]={
+    {0.2990,0.5870,0.1140},
+    {-0.1687,-0.3313,0.5000},
+    {0.5000,-0.4187,-0.0813}
+  };
+
+  printf("\n＜入力信号(RGB)＞\n");
+  printf("--- R ---\n");
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+	    show_imgin_data(0,j,i);
+    }
+    printf("\n");
+  }
+  printf("--- G ---\n");
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+	    show_imgin_data(1,j,i);
+    }
+    printf("\n");
+  }
+  printf("--- B ---\n");
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      show_imgin_data(2,j,i);
+    }
+    printf("\n");
+  }
+  printf("\n");
+
+  // 実数値としてYCbCr信号に変換
+  for(int i=0;i<3;i++){
+    
+  }
+}
 
 void ybr_to_rgb(void)
-{}
+{
+  double transformation_matrix[3][3]={
+    {1.0000,0.0000,1.4020},
+    {1.0000,-0.3441,-0.7141},
+    {1.0000,1.7720,0.0000}
+  };
+}
+
+void show_imgin_data(int num,int x,int y)
+{
+  if(imgin[num][x][y]>=16){
+    printf("%x ",imgin[num][x][y]);
+  }else{
+    printf("0%x ",imgin[num][x][y]);
+  }
+}
+
+int round_off(double num)
+{
+  double offset;
+
+  if(num>=0.0){
+    offset=0.5;
+  }else{
+    offset=-0.5;
+  }
+
+  num+=offset;
+  if(num>255){
+    num=255;
+  }else if(num<0){
+    num=0;
+  }
+  
+  return (int)num;
+}
+
+int round_off_cbcr(double num)
+{
+  double offset;
+  int ans;
+
+  if(num>=0.0){
+    offset=0.5;
+  }else{
+    offset=-0.5;
+  }
+
+  ans=(int)(num+offset);
+  ans+=128;
+
+  if(ans>255){
+    ans=255;
+  }else if(ans<0){
+    ans=0;
+  }
+
+  return ans;
+}
