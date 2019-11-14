@@ -160,7 +160,8 @@ void put_data()
 
 void rgb_to_ybr(void)
 {
-  double ycbcr[3][IMAGE_SIZE][IMAGE_SIZE];
+  int i,j,k;
+  double ycbcr[3];
   double transformation_matrix[3][3]={
     {0.2990,0.5870,0.1140},
     {-0.1687,-0.3313,0.5000},
@@ -192,9 +193,44 @@ void rgb_to_ybr(void)
   printf("\n");
 
   // 実数値としてYCbCr信号に変換
-  for(int i=0;i<3;i++){
-    
+  for(i=0;i<height;i++){
+    for(j=0;j<width;j++){
+      for(k=0;k<3;k++){
+        ycbcr[k]=transformation_matrix[k][0]*imgin[0][i][j]+transformation_matrix[k][1]*imgin[1][i][j]+transformation_matrix[k][2]*imgin[2][i][j];
+      }
+      ycbcr[0]=round_off(ycbcr[0]);
+      ycbcr[1]=round_off_cbcr(ycbcr[1]);
+      ycbcr[2]=round_off_cbcr(ycbcr[2]);
+      imgin[0][i][j]=ycbcr[0];
+      imgin[1][i][j]=ycbcr[1];
+      imgin[2][i][j]=ycbcr[2];
+    }
   }
+  
+  printf("＜入力信号(YCbCr)＞\n");
+  printf("--- Y ---\n");
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+	    show_imgin_data(0,j,i);
+    }
+    printf("\n");
+  }
+  printf("--- Cb ---\n");
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+	    show_imgin_data(1,j,i);
+    }
+    printf("\n");
+  }
+  printf("--- Cr ---\n");
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      show_imgin_data(2,j,i);
+    }
+    printf("\n");
+  }
+  printf("\n");
+  
 }
 
 void ybr_to_rgb(void)
@@ -209,9 +245,9 @@ void ybr_to_rgb(void)
 void show_imgin_data(int num,int x,int y)
 {
   if(imgin[num][x][y]>=16){
-    printf("%x ",imgin[num][x][y]);
+    printf("%X ",imgin[num][x][y]);
   }else{
-    printf("0%x ",imgin[num][x][y]);
+    printf("0%X ",imgin[num][x][y]);
   }
 }
 
