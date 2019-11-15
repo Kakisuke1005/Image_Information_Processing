@@ -6,7 +6,7 @@
 
 void get_data(void);  // 
 int get_decimal_number(int start,int num);  //ヘッダーのデータを10進数として計算
-void processing(void);  // 画像データをコピーおよび画像の反転
+void processing(void);  // 画像の加工
 void put_data(void);  // 画像データを出力
 void rgb_to_ybr(void);
 void ybr_to_rgb(void);
@@ -114,16 +114,47 @@ int get_decimal_number(int start,int num)
 
 void processing(void)
 {
-  // 画像の反転処理
-  for(int i=0;i<3;i++){
-    for(int j=0;j<height;j++){
-      for(int k=0;k<width;k++){
-	      imgout[i][k][j]=imgin[i][width-k-1][j];
+  int y,b,r;
+  printf("\nコピーモードを入力して下さい\n");
+  printf("(コピーする場合：1，固定値に置き換える場合：0)\n");
+  printf("Y  :");
+  scanf("%d",&y);
+  printf("Cb :");
+  scanf("%d",&b);
+  printf("Cr :");
+  scanf("%d",&r);
+
+  // 画像の処理
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      switch(y){
+      case 1:
+	imgout[0][j][i]=imgin[0][j][i];
+	break;
+      case 0:
+	imgout[0][j][i]=128;
+	break;
+      }
+      switch(b){
+      case 1:
+	imgout[1][j][i]=imgin[1][j][i];
+	break;
+      case 0:
+	imgout[1][j][i]=128;
+	break;
+      }
+      switch(r){
+      case 1:
+	imgout[2][j][i]=imgin[2][j][i];
+	break;
+      case 0:
+	imgout[2][j][i]=128;
+	break;
       }
     }
   }
-
-  printf("出力画像データを作成しました\n");
+  
+  printf("\n出力画像データを作成しました\n");
 }
 
 void put_data()
