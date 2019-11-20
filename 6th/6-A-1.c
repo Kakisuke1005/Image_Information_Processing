@@ -182,7 +182,7 @@ void rgb_to_ybr(void)
 
 void ybr_to_rgb(void)
 {
-  double rgb[3];
+  double rgb[3][IMAGE_SIZE][IMAGE_SIZE];
   double transformation_matrix[3][3]={
     {1.0000,0.0000,1.4020},
     {1.0000,-0.3441,-0.7141},
@@ -193,13 +193,20 @@ void ybr_to_rgb(void)
   for(int i=0;i<height;i++){
     for(int j=0;j<width;j++){
       for(int k=0;k<3;k++){
-        rgb[k]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
+        rgb[k][i][j]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
       }
-      imgout[0][i][j]=round_off(rgb[0]);
-      imgout[1][i][j]=round_off(rgb[1]);
-      imgout[2][i][j]=round_off(rgb[2]);
     }
-  }    
+  }
+
+  // 四捨五入処理
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      for(int k=0;k<3;k++){
+        imgout[k][i][j]=round_off(rgb[k][i][j]);
+      }
+    }
+  }
+
 }
 
 int round_off(double num)

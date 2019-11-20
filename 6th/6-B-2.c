@@ -12,9 +12,6 @@ void rgb_to_ybr(void);
 void ybr_to_rgb(void);
 int round_off(double num);  // 四捨五入をする
 int round_off_cbcr(double num);  // Cb,Cr信号に対する整数化
-void show_image(int num,int key);  // 画像データの表示
-void show_image_data(int num,int x,int y,int key);  // 画像データの表示(二桁の16進数の表示))
-
 
 unsigned char header[HEADER_SIZE];  // ヘッダー部のデータ
 unsigned char imgin[3][IMAGE_SIZE][IMAGE_SIZE];  // データ部の画像データ
@@ -27,9 +24,6 @@ int main(void)
  rgb_to_ybr();
  processing();
  ybr_to_rgb();
-  //show_image(0,1);
-  show_image(1,1);
-  //show_image(2,1);
  put_data();
  return 0;
 }
@@ -42,10 +36,10 @@ void get_data(void)
   int i=0,j;
   int filesize,offset,bits;
 
-  //printf("入力ファイル名を入力して下さい:");
-  //scanf("%s",file_name);
+  printf("入力ファイル名を入力して下さい:");
+  scanf("%s",file_name);
 
-  fp=fopen("maldives.bmp","rb");
+  fp=fopen(file_name,"rb");
   if(fp==NULL){
     printf("ファイルを開けません\n");
     exit(1);
@@ -124,29 +118,28 @@ void processing(void)
   width_harf=width/2;
 
   // 画像の加工処理
-  for(int i=0;i<3;i++){
-    for(int j=0;j<height;j++){
-      for(int k=0;k<width;k++){
-        imgout[i][k][j]=imgin[i][k][j];
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      imgout[0][i][j]=0;
+      imgout[1][i][j]=128;
+      imgout[2][i][j]=128;
+    }
+  }
+  for(int i=0;i<width_harf;i++){
+    for(int j=0;j<height_harf;j++){
+      for(int k=0;k<3;k++){
+        imgout[k][i][j]=imgin[k][i][j];
+      }
+    }
+  }
+  for(int i=width_harf;i<width;i++){
+    for(int j=height_harf;j<height;j++){
+      for(int k=0;k<3;k++){
+        imgout[k][i][j]=imgin[k][i][j];
       }
     }
   }
 
-  for(int i=0;i<height_harf;i++){
-    for(int j=width_harf;j<width;j++){
-      imgout[0][j][i]=0;
-      imgout[1][j][i]=128;
-      imgout[2][j][i]=128;
-    }
-  }
-
-  for(int i=height_harf;i<height;i++){
-    for(int j=0;j<width_harf;j++){
-      imgout[0][j][i]=0;
-      imgout[1][j][i]=128;
-      imgout[2][j][i]=128;
-    }
-  }
   
   printf("出力画像データを作成しました\n");
 }
@@ -157,10 +150,10 @@ void put_data()
   FILE *fp;
   char file_name[20];
 
-  //printf("出力ファイル名を入力して下さい:");
-  //scanf("%s",file_name);
+  printf("出力ファイル名を入力して下さい:");
+  scanf("%s",file_name);
 
-  fp=fopen("maldives-06-B-2.bmp","wb");
+  fp=fopen(file_name,"wb");
   if(fp==NULL){
     printf("ファイルを開けませんでした\n");
     exit(1);
@@ -275,37 +268,4 @@ int round_off_cbcr(double num)
   }
 
   return ans;
-}
-
-void show_image(int num,int key)
-{
-  int height_harf,width_harf;
-  height_harf=height/2;
-  width_harf=width/2;
-  for(int i=0;i<height_harf;i++){
-    for(int j=width_harf;j<width;j++){
-	    show_image_data(num,j,i,key);
-    }
-    printf("\n");
-  }
-}
-
-void show_image_data(int num,int x,int y,int key)
-{
-  switch(key){
-    case 0:
-      if(imgin[num][x][y]>=16){
-        printf("%X ",imgin[num][x][y]);
-      }else{
-        printf("0%X ",imgin[num][x][y]);
-      }
-    break;
-    case 1:
-      if(imgout[num][x][y]>=16){
-        printf("%X ",imgout[num][x][y]);
-      }else{
-        printf("0%X ",imgout[num][x][y]);
-      }
-    break;
-  }
 }
