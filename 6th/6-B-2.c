@@ -12,6 +12,9 @@ void rgb_to_ybr(void);
 void ybr_to_rgb(void);
 int round_off(double num);  // 四捨五入をする
 int round_off_cbcr(double num);  // Cb,Cr信号に対する整数化
+void show_image(int num,int key);  // 画像データの表示
+void show_image_data(int num,int x,int y,int key);  // 画像データの表示(二桁の16進数の表示))
+
 
 unsigned char header[HEADER_SIZE];  // ヘッダー部のデータ
 unsigned char imgin[3][IMAGE_SIZE][IMAGE_SIZE];  // データ部の画像データ
@@ -24,8 +27,10 @@ int main(void)
  rgb_to_ybr();
  processing();
  ybr_to_rgb();
+  //show_image(0,1);
+  //show_image(1,1);
+  //show_image(2,1);
  put_data();
-
  return 0;
 }
 
@@ -122,24 +127,24 @@ void processing(void)
   for(int i=0;i<3;i++){
     for(int j=0;j<height;j++){
       for(int k=0;k<width;k++){
-	imgout[i][k][j]=imgin[i][k][j];
+        imgout[i][k][j]=0/*imgin[i][k][j]*/;
       }
     }
   }
-  for(int j=0;j<height_harf;j++){
+
+  /*for(int j=0;j<height_harf;j++){
     for(int k=width_harf;k<width;k++){
       imgout[0][k][j]=0;
       imgout[1][k][j]=0;
       imgout[2][k][j]=0;
     }
   }
-  for(int j=height_harf;j<height;j++){
+
+  /*for(int j=height_harf;j<height;j++){
     for(int k=0;k<width_harf;k++){
       imgout[0][k][j]=0;
-      imgout[1][k][j]=0;
-      imgout[2][k][j]=0;
     }
-  }
+  }*/
   
   printf("出力画像データを作成しました\n");
 }
@@ -191,12 +196,9 @@ void rgb_to_ybr(void)
       for(int k=0;k<3;k++){
         ycbcr[k]=transformation_matrix[k][0]*imgin[0][i][j]+transformation_matrix[k][1]*imgin[1][i][j]+transformation_matrix[k][2]*imgin[2][i][j];
       }
-      ycbcr[0]=round_off(ycbcr[0]);
-      ycbcr[1]=round_off_cbcr(ycbcr[1]);
-      ycbcr[2]=round_off_cbcr(ycbcr[2]);
-      imgin[0][i][j]=ycbcr[0];
-      imgin[1][i][j]=ycbcr[1];
-      imgin[2][i][j]=ycbcr[2];
+      imgin[0][i][j]=round_off_cbcr(ycbcr[0]);
+      imgin[1][i][j]=round_off_cbcr(ycbcr[1]);
+      imgin[2][i][j]=round_off_cbcr(ycbcr[2]);
     }
   }
 }
@@ -216,12 +218,9 @@ void ybr_to_rgb(void)
       for(int k=0;k<3;k++){
         rgb[k]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
       }
-      rgb[0]=round_off(rgb[0]);
-      rgb[1]=round_off(rgb[1]);
-      rgb[2]=round_off(rgb[2]);
-      imgout[0][i][j]=rgb[0];
-      imgout[1][i][j]=rgb[1];
-      imgout[2][i][j]=rgb[2];
+      imgout[0][i][j]=round_off(rgb[0]);
+      imgout[1][i][j]=round_off(rgb[1]);
+      imgout[2][i][j]=round_off(rgb[2]);
     }
   }    
 }
@@ -267,4 +266,34 @@ int round_off_cbcr(double num)
   }
 
   return ans;
+}
+
+void show_image(int num,int key)
+{
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+	    show_image_data(num,j,i,key);
+    }
+    printf("\n");
+  }
+}
+
+void show_image_data(int num,int x,int y,int key)
+{
+  switch(key){
+    case 0:
+      if(imgin[num][x][y]>=16){
+        printf("%X ",imgin[num][x][y]);
+      }else{
+        printf("0%X ",imgin[num][x][y]);
+      }
+    break;
+    case 1:
+      if(imgout[num][x][y]>=16){
+        printf("%X ",imgout[num][x][y]);
+      }else{
+        printf("0%X ",imgout[num][x][y]);
+      }
+    break;
+  }
 }

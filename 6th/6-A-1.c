@@ -173,12 +173,9 @@ void rgb_to_ybr(void)
       for(int k=0;k<3;k++){
         ycbcr[k]=transformation_matrix[k][0]*imgin[0][i][j]+transformation_matrix[k][1]*imgin[1][i][j]+transformation_matrix[k][2]*imgin[2][i][j];
       }
-      ycbcr[0]=round_off(ycbcr[0]);
-      ycbcr[1]=round_off_cbcr(ycbcr[1]);
-      ycbcr[2]=round_off_cbcr(ycbcr[2]);
-      imgin[0][i][j]=ycbcr[0];
-      imgin[1][i][j]=ycbcr[1];
-      imgin[2][i][j]=ycbcr[2];
+      imgin[0][i][j]=round_off_cbcr(ycbcr[0]);
+      imgin[1][i][j]=round_off_cbcr(ycbcr[1]);
+      imgin[2][i][j]=round_off_cbcr(ycbcr[2]);
     }
   }
 }
@@ -198,12 +195,9 @@ void ybr_to_rgb(void)
       for(int k=0;k<3;k++){
         rgb[k]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
       }
-      rgb[0]=round_off(rgb[0]);
-      rgb[1]=round_off(rgb[1]);
-      rgb[2]=round_off(rgb[2]);
-      imgout[0][i][j]=rgb[0];
-      imgout[1][i][j]=rgb[1];
-      imgout[2][i][j]=rgb[2];
+      imgout[0][i][j]=round_off(rgb[0]);
+      imgout[1][i][j]=round_off(rgb[1]);
+      imgout[2][i][j]=round_off(rgb[2]);
     }
   }    
 }
