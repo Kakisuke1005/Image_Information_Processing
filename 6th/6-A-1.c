@@ -173,7 +173,7 @@ void rgb_to_ybr(void)
       for(int k=0;k<3;k++){
         ycbcr[k]=transformation_matrix[k][0]*imgin[0][i][j]+transformation_matrix[k][1]*imgin[1][i][j]+transformation_matrix[k][2]*imgin[2][i][j];
       }
-      imgin[0][i][j]=round_off_cbcr(ycbcr[0]);
+      imgin[0][i][j]=round_off(ycbcr[0]);
       imgin[1][i][j]=round_off_cbcr(ycbcr[1]);
       imgin[2][i][j]=round_off_cbcr(ycbcr[2]);
     }

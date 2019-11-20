@@ -28,7 +28,7 @@ int main(void)
  processing();
  ybr_to_rgb();
   //show_image(0,1);
-  //show_image(1,1);
+  show_image(1,1);
   //show_image(2,1);
  put_data();
  return 0;
@@ -42,10 +42,10 @@ void get_data(void)
   int i=0,j;
   int filesize,offset,bits;
 
-  printf("入力ファイル名を入力して下さい:");
-  scanf("%s",file_name);
+  //printf("入力ファイル名を入力して下さい:");
+  //scanf("%s",file_name);
 
-  fp=fopen(file_name,"rb");
+  fp=fopen("maldives.bmp","rb");
   if(fp==NULL){
     printf("ファイルを開けません\n");
     exit(1);
@@ -127,24 +127,26 @@ void processing(void)
   for(int i=0;i<3;i++){
     for(int j=0;j<height;j++){
       for(int k=0;k<width;k++){
-        imgout[i][k][j]=0/*imgin[i][k][j]*/;
+        imgout[i][k][j]=imgin[i][k][j];
       }
     }
   }
 
-  /*for(int j=0;j<height_harf;j++){
-    for(int k=width_harf;k<width;k++){
-      imgout[0][k][j]=0;
-      imgout[1][k][j]=0;
-      imgout[2][k][j]=0;
+  for(int i=0;i<height_harf;i++){
+    for(int j=width_harf;j<width;j++){
+      imgout[0][j][i]=0;
+      imgout[1][j][i]=128;
+      imgout[2][j][i]=128;
     }
   }
 
-  /*for(int j=height_harf;j<height;j++){
-    for(int k=0;k<width_harf;k++){
-      imgout[0][k][j]=0;
+  for(int i=height_harf;i<height;i++){
+    for(int j=0;j<width_harf;j++){
+      imgout[0][j][i]=0;
+      imgout[1][j][i]=128;
+      imgout[2][j][i]=128;
     }
-  }*/
+  }
   
   printf("出力画像データを作成しました\n");
 }
@@ -155,10 +157,10 @@ void put_data()
   FILE *fp;
   char file_name[20];
 
-  printf("出力ファイル名を入力して下さい:");
-  scanf("%s",file_name);
+  //printf("出力ファイル名を入力して下さい:");
+  //scanf("%s",file_name);
 
-  fp=fopen(file_name,"wb");
+  fp=fopen("maldives-06-B-2.bmp","wb");
   if(fp==NULL){
     printf("ファイルを開けませんでした\n");
     exit(1);
@@ -196,7 +198,7 @@ void rgb_to_ybr(void)
       for(int k=0;k<3;k++){
         ycbcr[k]=transformation_matrix[k][0]*imgin[0][i][j]+transformation_matrix[k][1]*imgin[1][i][j]+transformation_matrix[k][2]*imgin[2][i][j];
       }
-      imgin[0][i][j]=round_off_cbcr(ycbcr[0]);
+      imgin[0][i][j]=round_off(ycbcr[0]);
       imgin[1][i][j]=round_off_cbcr(ycbcr[1]);
       imgin[2][i][j]=round_off_cbcr(ycbcr[2]);
     }
@@ -205,7 +207,7 @@ void rgb_to_ybr(void)
 
 void ybr_to_rgb(void)
 {
-  double rgb[3];
+  double rgb[3][IMAGE_SIZE][IMAGE_SIZE];
   double transformation_matrix[3][3]={
     {1.0000,0.0000,1.4020},
     {1.0000,-0.3441,-0.7141},
@@ -216,13 +218,20 @@ void ybr_to_rgb(void)
   for(int i=0;i<height;i++){
     for(int j=0;j<width;j++){
       for(int k=0;k<3;k++){
-        rgb[k]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
+        rgb[k][i][j]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
       }
-      imgout[0][i][j]=round_off(rgb[0]);
-      imgout[1][i][j]=round_off(rgb[1]);
-      imgout[2][i][j]=round_off(rgb[2]);
     }
-  }    
+  }
+
+  // 四捨五入処理
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      for(int k=0;k<3;k++){
+        imgout[k][i][j]=round_off(rgb[k][i][j]);
+      }
+    }
+  }
+
 }
 
 int round_off(double num)
@@ -238,7 +247,7 @@ int round_off(double num)
   num+=offset;
   if(num>255){
     num=255;
-  }else if(num<0){
+  }else if(num<=0){
     num=0;
   }
   
@@ -270,8 +279,11 @@ int round_off_cbcr(double num)
 
 void show_image(int num,int key)
 {
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
+  int height_harf,width_harf;
+  height_harf=height/2;
+  width_harf=width/2;
+  for(int i=0;i<height_harf;i++){
+    for(int j=width_harf;j<width;j++){
 	    show_image_data(num,j,i,key);
     }
     printf("\n");
