@@ -139,7 +139,6 @@ void processing(void)
       }
     }
   }
-
   
   printf("出力画像データを作成しました\n");
 }
