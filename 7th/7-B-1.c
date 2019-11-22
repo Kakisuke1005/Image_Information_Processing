@@ -128,7 +128,7 @@ void processing(void)
     }
   }
 
-  // 画像の加工処理
+  /*  // 画像の加工処理
   for(int i=0;i<height;i++){
     for(int j=0;j<width;j++){
       for(int k=i*key;k<(i*key)+key;k++){
@@ -148,7 +148,7 @@ void processing(void)
 	}
       }
     }
-  }
+    }*/
 
   printf("出力画像データを作成しました\n");
 }
