@@ -113,7 +113,7 @@ int get_decimal_number(int start,int num)
 
 void processing(void)
 {
-  int tmp[IMAGE_SIZE][IMAGE_SIZE]={};
+  int tmp[IMAGE_SIZE][IMAGE_SIZE]={0};
 
   // 画像のコピーおよび白黒画像に変換
   for(int i=0;i<height;i++){
@@ -128,9 +128,9 @@ void processing(void)
   for(int i=0;i<height;i++){
     for(int j=0;j<width;j++){
       for(int k=i*2;k<(i*2)+2;k++){
-	for(int l=j*2;l<(j*2)+2;l++){
-	  tmp[i][j]+=imgout[0][k][l];
-	}
+	      for(int l=j*2;l<(j*2)+2;l++){
+	        tmp[i][j]+=imgout[0][k][l];
+	      }
       }
       tmp[i][j]/=4;
     }
@@ -139,9 +139,9 @@ void processing(void)
   for(int i=0;i<height;i++){
     for(int j=0;j<width;j++){
       for(int k=i*2;k<(i*2)+2;k++){
-	for(int l=j*2;l<(j*2)+2;l++){
-	  imgout[0][k][l]=tmp[i][j];
-	}
+	      for(int l=j*2;l<(j*2)+2;l++){
+	        imgout[0][k][l]=tmp[i][j];
+	      }
       }
     }
   }

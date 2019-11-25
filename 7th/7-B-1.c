@@ -128,7 +128,8 @@ void processing(void)
     }
   }
 
-  
+  // 画像の加工処理
+
 
   printf("出力画像データを作成しました\n");
 }
