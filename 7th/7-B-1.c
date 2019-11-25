@@ -32,14 +32,14 @@ void get_data(void)
 {
 
   FILE *fp;
-  char file_name[20];
+  //char file_name[20];
   int i=0,j;
   int filesize,offset,bits;
 
-  printf("入力ファイル名を入力して下さい:");
-  scanf("%s",file_name);
+  //printf("入力ファイル名を入力して下さい:");
+  //scanf("%s",file_name);
 
-  fp=fopen(file_name,"rb");
+  fp=fopen("maldives.bmp","rb");
   if(fp==NULL){
     printf("ファイルを開けません\n");
     exit(1);
@@ -114,41 +114,21 @@ int get_decimal_number(int start,int num)
 void processing(void)
 {
   int key;
-  int tmp[IMAGE_SIZE][IMAGE_SIZE]={};
+  int tmp[IMAGE_SIZE][IMAGE_SIZE]={0};
 
   printf("ブロックサイズを入力して下さい(2,4,8,16):");
   scanf("%d",&key);
 
   // 画像のコピーおよび白黒画像に変換
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
+  for(int i=0;i<width;i++){
+    for(int j=0;j<height;j++){
       imgout[0][i][j]=imgin[0][i][j];
       imgout[1][i][j]=128;
       imgout[2][i][j]=128;
     }
   }
 
-  /*  // 画像の加工処理
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
-      for(int k=i*key;k<(i*key)+key;k++){
-	for(int l=j*key;l<(j*key)+key;l++){
-	  tmp[i][j]+=imgout[0][k][l];
-	}
-      }
-      tmp[i][j]/=4;
-    }
-  }
-
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
-      for(int k=i*key;k<(i*key)+key;k++){
-	for(int l=j*key;l<(j*key)+key;l++){
-	  imgout[0][k][l]=tmp[i][j];
-	}
-      }
-    }
-    }*/
+  
 
   printf("出力画像データを作成しました\n");
 }
@@ -157,12 +137,12 @@ void put_data()
 {
 
   FILE *fp;
-  char file_name[20];
+  //char file_name[20];
 
-  printf("出力ファイル名を入力して下さい:");
-  scanf("%s",file_name);
+  //printf("出力ファイル名を入力して下さい:");
+  //scanf("%s",file_name);
 
-  fp=fopen(file_name,"wb");
+  fp=fopen("maldives-07-B-1.bmp","wb");
   if(fp==NULL){
     printf("ファイルを開けませんでした\n");
     exit(1);
@@ -195,8 +175,8 @@ void rgb_to_ybr(void)
   };
 
   // YCbCr信号に変換
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
+  for(int i=0;i<width;i++){
+    for(int j=0;j<height;j++){
       for(int k=0;k<3;k++){
         ycbcr[k]=transformation_matrix[k][0]*imgin[0][i][j]+transformation_matrix[k][1]*imgin[1][i][j]+transformation_matrix[k][2]*imgin[2][i][j];
       }
@@ -217,8 +197,8 @@ void ybr_to_rgb(void)
   };
 
   // RGB信号に変換
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
+  for(int i=0;i<width;i++){
+    for(int j=0;j<height;j++){
       for(int k=0;k<3;k++){
         rgb[k][i][j]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
       }
@@ -226,8 +206,8 @@ void ybr_to_rgb(void)
   }
 
   // 四捨五入処理
-  for(int i=0;i<height;i++){
-    for(int j=0;j<width;j++){
+  for(int i=0;i<width;i++){
+    for(int j=0;j<height;j++){
       for(int k=0;k<3;k++){
         imgout[k][i][j]=round_off(rgb[k][i][j]);
       }
