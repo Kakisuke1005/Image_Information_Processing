@@ -32,14 +32,14 @@ void get_data(void)
 {
 
   FILE *fp;
-  //char file_name[20];
+  char file_name[20];
   int i=0,j;
   int filesize,offset,bits;
 
-  //printf("入力ファイル名を入力して下さい:");
-  //scanf("%s",file_name);
+  printf("入力ファイル名を入力して下さい:");
+  scanf("%s",file_name);
 
-  fp=fopen("maldives.bmp","rb");
+  fp=fopen(file_name,"rb");
   if(fp==NULL){
     printf("ファイルを開けません\n");
     exit(1);
@@ -113,8 +113,7 @@ int get_decimal_number(int start,int num)
 
 void processing(void)
 {
-  int key;
-  int tmp[IMAGE_SIZE][IMAGE_SIZE]={0};
+  int key,tmp;
 
   printf("ブロックサイズを入力して下さい(2,4,8,16):");
   scanf("%d",&key);
@@ -129,8 +128,22 @@ void processing(void)
   }
 
   // 画像の加工処理
-  
-
+  for(int i=0;i<(width/key);i++){
+    for(int j=0;j<(height/key);j++){
+      tmp=0;
+      for(int k=i*key;k<key*(i+1);k++){
+        for(int l=j*key;l<key*(j+1);l++){
+          tmp+=imgout[0][k][l];
+        }
+      }
+      tmp/=(key*key);
+      for(int k=i*key;k<key*(i+1);k++){
+        for(int l=j*key;l<key*(j+1);l++){
+          imgout[0][k][l]=tmp;
+        }
+      }
+    }
+  }
 
   printf("出力画像データを作成しました\n");
 }
@@ -139,12 +152,12 @@ void put_data()
 {
 
   FILE *fp;
-  //char file_name[20];
+  char file_name[20];
 
-  //printf("出力ファイル名を入力して下さい:");
-  //scanf("%s",file_name);
+  printf("出力ファイル名を入力して下さい:");
+  scanf("%s",file_name);
 
-  fp=fopen("maldives-07-B-1.bmp","wb");
+  fp=fopen(file_name,"wb");
   if(fp==NULL){
     printf("ファイルを開けませんでした\n");
     exit(1);
