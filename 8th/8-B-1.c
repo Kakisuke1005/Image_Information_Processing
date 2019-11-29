@@ -130,6 +130,7 @@ void processing(void)
   // 画像の加工処理
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
+      imgout[0][i][j]1.875
     }
   }
 
