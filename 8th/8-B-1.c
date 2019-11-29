@@ -113,7 +113,7 @@ int get_decimal_number(int start,int num)
 
 void processing(void)
 {
-  int key,border;
+  int key;
 
   printf("出力画像の量子化レベル数を入力して下さい(2,4,8,16) :");
   scanf("%d",&key);
@@ -130,11 +130,6 @@ void processing(void)
   // 画像の加工処理
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
-      if((imgout[0][i][j]>=0)&&(imgout[0][i][j]<=127)){
-	imgout[0][i][j]=64;
-      }else if((imgout[0][i][j]>=128)&&(imgout[0][i][j]<=255)){
-	imgout[0][i][j]=192;
-      }
     }
   }
 
