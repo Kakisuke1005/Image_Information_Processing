@@ -127,9 +127,9 @@ void processing(void)
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
       if((imgout[0][i][j]>=0)&&(imgout[0][i][j]<=127)){
-	imgout[0][i][j]=64;
+        imgout[0][i][j]=64;
       }else if((imgout[0][i][j]>=128)&&(imgout[0][i][j]<=255)){
-	imgout[0][i][j]=192;
+        imgout[0][i][j]=192;
       }
     }
   }
