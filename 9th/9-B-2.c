@@ -147,7 +147,17 @@ void processing(void)
   printf("最小画素値: %3d\n\n",min);
 
   // コンストラクトの改善処理
-
+  for(int i=0;i<width;i++){
+    for(int j=0;j<height;j++){
+      if((imgout[0][i][j]>=0)&&(imgout[0][i][j]<min)){
+	imgout[0][i][j]=0;
+      }else if(imgout[0][i][j]>max){
+	imgout[0][i][j]=255;
+      }else{
+	imgout[0][i][j]=(255/(max-min))*(imgout[0][i][j]-min);
+      }
+    }
+  }
 
   // b-2が終わったらb-1を用いてヒストグラムが改ざんされたことを確認 
 }
