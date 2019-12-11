@@ -159,7 +159,7 @@ void processing(void)
 
   // ヒストグラムの作成
   // 背景を黒にする
-  for(int i=0;i<256;i++){
+  for(int i=0;i<257;i++){
     for(int j=412;j<height;j++){
       imgout[0][i][j]=0;
       imgout[1][i][j]=128;
@@ -168,11 +168,11 @@ void processing(void)
   }
 
   // グラフを描画する
-  for(int i=0;i<256;i++){
+  for(int i=0;i<257;i++){
     for(int j=height;j>height-countNormalization[i];j--){
-	imgout[0][i][j]=0;
-	imgout[1][i][j]=128;
-	imgout[2][i][j]=255;
+	    imgout[0][i][j-1]=0;
+	    imgout[1][i][j-1]=128;
+	    imgout[2][i][j-1]=255;
     }
   }
   
