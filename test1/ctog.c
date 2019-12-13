@@ -52,11 +52,11 @@ void get_data(char *argv[])
   printf("＜画像の高さ＞\n");
   printf("%dライン\n",height);
   
-  for(int i=0;i<width;i++){
-    for(int j=height-1;j>0;j--){
-      imgin[2][i][j]=fgetc(fp);
-      imgin[1][i][j]=fgetc(fp);
-      imgin[0][i][j]=fgetc(fp);
+  for(int i=height-1;i>0;i--){
+    for(int j=0;j<width;j++){
+      imgin[2][j][i]=fgetc(fp);
+      imgin[1][j][i]=fgetc(fp);
+      imgin[0][j][i]=fgetc(fp);
     }
   }
   
@@ -174,11 +174,11 @@ void put_data(char *argv[])
     fputc(header[i],fp);
   }
   
-  for(int i=0;i<width;i++){
-    for(int j=height-1;j>0;j--){
-      fputc(imgout[2][i][j],fp);
-      fputc(imgout[1][i][j],fp);
-      fputc(imgout[0][i][j],fp);
+  for(int i=height-1;i>0;i--){
+    for(int j=0;j<width;j++){
+      fputc(imgout[2][j][i],fp);
+      fputc(imgout[1][j][i],fp);
+      fputc(imgout[0][j][i],fp);
     }
   }
   
