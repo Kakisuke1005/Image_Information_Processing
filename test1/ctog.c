@@ -75,7 +75,7 @@ void rgb_to_ybr(void)
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
       for(int k=0;k<3;k++){
-	ycbcr[k]=transformation[k][0]*imgin[0][i][j]+transformation[k][1]*imgin[1][i][j]+transformation[k][2]*imgin[2][i][j];
+	      ycbcr[k]=transformation[k][0]*imgin[0][i][j]+transformation[k][1]*imgin[1][i][j]+transformation[k][2]*imgin[2][i][j];
       }
       imgin[0][i][j]=round_off(ycbcr[0]);
       imgin[1][i][j]=round_off_br(ycbcr[1]);
@@ -150,10 +150,10 @@ void ybr_to_rgb(void)
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
       for(int k=0;k<3;k++){
-	rgb[k]=transformation[k][0]*imgout[0][i][j]+transformation[k][1]*(imgout[1][i][j]-128)+transformation[k][2]*(imgout[2][i][j]-128);
+	      rgb[k]=transformation[k][0]*imgout[0][i][j]+transformation[k][1]*(imgout[1][i][j]-128)+transformation[k][2]*(imgout[2][i][j]-128);
       }
       for(int k=0;k<3;k++){
-	imgout[k][i][j]=round_off(rgb[k]);
+	      imgout[k][i][j]=round_off(rgb[k]);
       }
     }
   }
@@ -174,11 +174,11 @@ void put_data(char *argv[])
     fputc(header[i],fp);
   }
   
-  for(int i=height-1;i>0;i--){
+  for(int i=height;i>0;i--){
     for(int j=0;j<width;j++){
-      fputc(imgout[2][j][i],fp);
-      fputc(imgout[1][j][i],fp);
-      fputc(imgout[0][j][i],fp);
+      fputc(imgout[2][j][i-1],fp);
+      fputc(imgout[1][j][i-1],fp);
+      fputc(imgout[0][j][i-1],fp);
     }
   }
   
