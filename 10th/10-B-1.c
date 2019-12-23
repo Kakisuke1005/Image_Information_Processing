@@ -122,13 +122,13 @@ void processing(void)
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
       if((0<=i/scale_rate)&&(i/scale_rate<width-1)&&(0<=j/scale_rate)&&(j/scale_rate<height-1)){
-	imgout[0][i][j]=imgin[0][(int)(i/scale_rate+0.5)][(int)(j/scale_rate+0.5)];
-	imgout[1][i][j]=imgin[1][(int)(i/scale_rate+0.5)][(int)(j/scale_rate+0.5)];
-	imgout[2][i][j]=imgin[2][(int)(i/scale_rate+0.5)][(int)(j/scale_rate+0.5)];
+	      imgout[0][i][j]=imgin[0][(int)(i/scale_rate+0.5)][(int)(j/scale_rate+0.5)];
+	      imgout[1][i][j]=imgin[1][(int)(i/scale_rate+0.5)][(int)(j/scale_rate+0.5)];
+	      imgout[2][i][j]=imgin[2][(int)(i/scale_rate+0.5)][(int)(j/scale_rate+0.5)];
       }else{
-	imgout[0][i][j]=0;
-	imgout[1][i][j]=128;
-	imgout[2][i][j]=128;
+	      imgout[0][i][j]=0;
+	      imgout[1][i][j]=128;
+	      imgout[2][i][j]=128;
       }
     }
   }
