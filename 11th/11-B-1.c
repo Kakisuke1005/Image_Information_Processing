@@ -125,7 +125,7 @@ void processing(void)
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
       for(int k=0;k<3;k++){
-	      if((0<=i/scale_rate)&&(i/scale_rate<width-1)&&(0<=j/scale_rate)&&(j/scale_rate<height-1)){
+	if((0<=i/scale_rate)&&(i/scale_rate<width-1)&&(0<=j/scale_rate)&&(j/scale_rate<height-1)){
           x=i/scale_rate;
           y=j/scale_rate;
 	  
@@ -136,11 +136,11 @@ void processing(void)
             (y-(int)y)*(x-(int)x)*imgin[k][(int)x+1][(int)y+1];
           
           imgout[k][i][j]=tmp;
-	      }else{
-	        imgout[0][i][j]=0;
-	        imgout[1][i][j]=128;
-	        imgout[2][i][j]=128;
-	      }
+	}else{
+	  imgout[0][i][j]=0;
+	  imgout[1][i][j]=128;
+	  imgout[2][i][j]=128;
+	}
       }
     }
   }
