@@ -132,24 +132,22 @@ void processing(void)
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
       if((i==0)||(j==0)||(i==width-1)||(j==height-1)){
-	imgout[0][i][j]=0;
-	imgout[1][i][j]=128;
-	imgout[2][i][j]=128;
+	      imgout[0][i][j]=0;
+	      imgout[1][i][j]=128;
+	      imgout[2][i][j]=128;
       }else{
-	tmp=0;
-	for(int k=i-1;k<=i+1;k++){
-	  for(int l=j-1;l<=j+1;l++){
-	    tmp+=imgin[0][k][l]*filter[k-i+1][l-j+1];
-	  }
-	}
-
-	imgout[0][i][j]=(int)(tmp+0.5)+128;
-	imgout[1][i][j]=128;
-	imgout[2][i][j]=128;
+      	tmp=0;
+	      for(int k=i-1;k<=i+1;k++){
+	        for(int l=j-1;l<=j+1;l++){
+	          tmp+=imgin[0][k][l]*filter[k-i+1][l-j+1];
+	        }
+	      }
+	      imgout[0][i][j]=((int)(tmp+0.5))+128;
+        imgout[1][i][j]=128;
+        imgout[2][i][j]=128;
       }
     }
   }
-
 }
       
 void put_data()
