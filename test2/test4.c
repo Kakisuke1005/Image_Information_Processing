@@ -113,92 +113,70 @@ int get_decimal_number(int start,int num)
 
 void processing(void)
 {
-  int tmp;
+  int tmp[IMAGE_SIZE][IMAGE_SIZE]={0};
 
-  // 画像のコピーおよび白黒に変換
-  for(int i=0;i<width;i++){
-    for(int j=0;j<height;j++){
+  // 画像のコピーおよび白黒画像に変換
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
       imgout[0][i][j]=imgin[0][i][j];
       imgout[1][i][j]=128;
       imgout[2][i][j]=128;
     }
   }
 
-  /*for(int i=0;i<(width/2);i++){
-    for(int j=0;j<(height/2);j++){
-      tmp=0;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
-	  tmp+=imgout[0][k][l];
+  // 画像の加工処理
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      for(int k=i*2;k<(i*2)+2;k++){
+	for(int l=j*2;l<(j*2)+2;l++){
+	  tmp[i][j]+=imgout[0][k][l];
 	}
       }
-      tmp/=4;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
-	  imgout[0][k][l]=tmp;
-	}
-      }
-    }
-    }*/
-
-  /*
-  // 領域B
-  for(int i=0;i<(width/2);i++){
-    for(int j=64;j<(128/2);j++){
-      tmp=0;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
-	  tmp+=imgout[0][k][l];
-	}
-      }
-      tmp/=4;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
-	  imgout[0][k][l]=tmp;
-	}
-      }
+      tmp[i][j]/=4;
     }
   }
-
-  // 領域C
-  for(int i=0;i<(width/4);i++){
-    for(int j=128;j<(192/4);j++){
-      tmp=0;
-      for(int k=i*4;k<4*(i+1);k++){
-	for(int l=j*4;l<4*(j+1);l++){
-	  tmp+=imgout[0][k][l];
-	}
-      }
-      tmp/=16;
-      for(int k=i*4;k<4*(i+1);k++){
-	for(int l=j*4;l<4*(j+1);l++){
-	  imgout[0][k][l]=tmp;
-	}
-      }
-    }
-  }
-
-  // 領域D
-  for(int i=0;i<(width/8);i++){
-    for(int j=192;j<(height/8);j++){
-      tmp=0;
-      for(int k=i*8;k<8*(i+1);k++){
-	for(int l=j*8;l<8*(j+1);l++){
-	  tmp+=imgout[0][k][l];
-	}
-      }
-      tmp/=64;
-      for(int k=i*8;k<8*(i+1);k++){
-	for(int l=j*8;l<8*(j+1);l++){
-	  imgout[0][k][l]=tmp;
-	}
-      }
-    }
-    }
-  */
-
-
   
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
+      for(int k=i*2;k<(i*2)+2;k++){
+	for(int l=j*2;l<(j*2)+2;l++){
+	  imgout[0][k][l]=tmp[i][j];
+	}
+      }
+    }
+  }
+
+  // b
+  for(int i=64;i<height-64-64;i++){
+    for(int j=0;j<width;j++){
+      for(int k=i*4;k<(i*4)+4;k++){
+	for(int l=j*4;l<(j*4)+4;l++){
+	  tmp[i][j]+=imgout[0][k][l];
+	}
+      }
+      tmp[i][j]/=16;
+    }
+  }
+  
+  for(int i=64;i<height-64-64;i++){
+    for(int j=0;j<width;j++){
+      for(int k=i*4;k<(i*4)+4;k++){
+	for(int l=j*4;l<(j*4)+4;l++){
+	  imgout[0][k][l]=tmp[i][j];
+	}
+      }
+    }
+  }
+
+
+  for(int i=0;i<width;i++){
+    for(int j=0;j<63;j++){
+      imgout[0][i][j]=imgin[0][i][j];
+    }
+  }
+
+
+  printf("出力画像データを作成しました\n");
 }
 
 void put_data()
@@ -243,8 +221,8 @@ void rgb_to_ybr(void)
   };
 
   // YCbCr信号に変換
-  for(int i=0;i<width;i++){
-    for(int j=0;j<height;j++){
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
       for(int k=0;k<3;k++){
         ycbcr[k]=transformation_matrix[k][0]*imgin[0][i][j]+transformation_matrix[k][1]*imgin[1][i][j]+transformation_matrix[k][2]*imgin[2][i][j];
       }
@@ -265,8 +243,8 @@ void ybr_to_rgb(void)
   };
 
   // RGB信号に変換
-  for(int i=0;i<width;i++){
-    for(int j=0;j<height;j++){
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
       for(int k=0;k<3;k++){
         rgb[k][i][j]=transformation_matrix[k][0]*imgout[0][i][j]+transformation_matrix[k][1]*(imgout[1][i][j]-128)+transformation_matrix[k][2]*(imgout[2][i][j]-128);
       }
@@ -274,8 +252,8 @@ void ybr_to_rgb(void)
   }
 
   // 四捨五入処理
-  for(int i=0;i<width;i++){
-    for(int j=0;j<height;j++){
+  for(int i=0;i<height;i++){
+    for(int j=0;j<width;j++){
       for(int k=0;k<3;k++){
         imgout[k][i][j]=round_off(rgb[k][i][j]);
       }

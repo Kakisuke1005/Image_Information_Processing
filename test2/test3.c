@@ -32,14 +32,14 @@ void get_data(void)
 {
 
   FILE *fp;
-  char file_name[20];
+  //char file_name[20];
   int i=0,j;
   int filesize,offset,bits;
 
-  printf("入力ファイル名を入力して下さい:");
-  scanf("%s",file_name);
+  //printf("入力ファイル名を入力して下さい:");
+  //scanf("%s",file_name);
 
-  fp=fopen(file_name,"rb");
+  fp=fopen("parrots.bmp","rb");
   if(fp==NULL){
     printf("ファイルを開けません\n");
     exit(1);
@@ -113,9 +113,10 @@ int get_decimal_number(int start,int num)
 
 void processing(void)
 {
-  int tmp;
+  int key=2,tmp;
+  int tmp2;
 
-  // 画像のコピーおよび白黒に変換
+  // 画像のコピーおよび白黒画像に変換
   for(int i=0;i<width;i++){
     for(int j=0;j<height;j++){
       imgout[0][i][j]=imgin[0][i][j];
@@ -124,93 +125,78 @@ void processing(void)
     }
   }
 
-  /*for(int i=0;i<(width/2);i++){
-    for(int j=0;j<(height/2);j++){
+  // 画像の加工処理
+  key=8;/*
+  for(int i=0;i<(width/key);i++){
+    for(int j=0;j<(height/key);j++){
       tmp=0;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
+      for(int k=i*key;k<key*(i+1);k++){
+	for(int l=j*key;l<key*(j+1);l++){
 	  tmp+=imgout[0][k][l];
 	}
       }
-      tmp/=4;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
+      tmp/=(key*key);
+      for(int k=i*key;k<key*(i+1);k++){
+	for(int l=j*key;l<key*(j+1);l++){
 	  imgout[0][k][l]=tmp;
 	}
       }
     }
     }*/
-
-  /*
-  // 領域B
-  for(int i=0;i<(width/2);i++){
-    for(int j=64;j<(128/2);j++){
+  key=4;
+  for(int i=0;i<(width/key);i++){
+    for(int j=0;j<(height/key);j++){
       tmp=0;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
+      for(int k=i*key;k<key*(i+1);k++){
+	for(int l=j*key;l<key*(j+1);l++){
 	  tmp+=imgout[0][k][l];
 	}
       }
-      tmp/=4;
-      for(int k=i*2;k<2*(i+1);k++){
-	for(int l=j*2;l<2*(j+1);l++){
+      tmp/=(key*key);
+      for(int k=i*key;k<key*(i+1);k++){
+	for(int l=j*key;l<key*(j+1);l++){
 	  imgout[0][k][l]=tmp;
-	}
+	}	  
       }
     }
-  }
-
-  // 領域C
-  for(int i=0;i<(width/4);i++){
-    for(int j=128;j<(192/4);j++){
-      tmp=0;
-      for(int k=i*4;k<4*(i+1);k++){
-	for(int l=j*4;l<4*(j+1);l++){
-	  tmp+=imgout[0][k][l];
-	}
-      }
-      tmp/=16;
-      for(int k=i*4;k<4*(i+1);k++){
-	for(int l=j*4;l<4*(j+1);l++){
-	  imgout[0][k][l]=tmp;
-	}
-      }
-    }
-  }
-
-  // 領域D
-  for(int i=0;i<(width/8);i++){
-    for(int j=192;j<(height/8);j++){
-      tmp=0;
-      for(int k=i*8;k<8*(i+1);k++){
-	for(int l=j*8;l<8*(j+1);l++){
-	  tmp+=imgout[0][k][l];
-	}
-      }
-      tmp/=64;
-      for(int k=i*8;k<8*(i+1);k++){
-	for(int l=j*8;l<8*(j+1);l++){
-	  imgout[0][k][l]=tmp;
-	}
-      }
-    }
-    }
-  */
-
-
   
+  }
+  key=2;
+  for(int i=0;i<(width/key);i++){
+    for(int j=0;j<(height/key);j++){
+      tmp=0;
+      for(int k=i*key;k<key*(i+1);k++){
+	for(int l=j*key;l<key*(j+1);l++){
+	  tmp+=imgout[0][k][l];
+	}
+      }
+      tmp/=(key*key);
+      for(int k=i*key;k<key*(i+1);k++){
+	for(int l=j*key;l<key*(j+1);l++){
+	  imgout[0][k][l]=tmp;
+	}
+      }
+    }
+  }
+  for(int i=0;i<width;i++){
+    for(int j=0;j<64;j++){
+      imgout[0][i][j]=imgin[0][i][j];
+    }
+  }
+  
+  printf("出力画像データを作成しました\n");
 }
 
 void put_data()
 {
 
   FILE *fp;
-  char file_name[20];
+  //char file_name[20];
 
-  printf("出力ファイル名を入力して下さい:");
-  scanf("%s",file_name);
+  //printf("出力ファイル名を入力して下さい:");
+  //scanf("%s",file_name);
 
-  fp=fopen(file_name,"wb");
+  fp=fopen("parrots-test.bmp","wb");
   if(fp==NULL){
     printf("ファイルを開けませんでした\n");
     exit(1);
